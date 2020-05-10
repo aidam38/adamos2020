@@ -1,1 +1,114 @@
-../.dotfiles/kdenlive/.config/kdenliverc
+[KFileDialog Settings]
+Recent Files[$e]=SKIF TOGETHER TRAINING IN THE SPIRIT OF SOKE KANAZAWA-IGXsHyMDk48.mkv,file:$HOME/SKIF TOGETHER TRAINING IN THE SPIRIT OF SOKE KANAZAWA-IGXsHyMDk48.mkv,file:$HOME/VID_20200507_114829.mp4,file:$HOME/VID_20200505_094927.mp4
+detailViewIconSize=0
+
+[MainWindow]
+Height 1080=1080
+State=AAAA/wAAAAD9AAAAAQAAAAIAAAd8AAACMPwBAAAADvsAAAAYAG4AbwB0AGUAcwBfAHcAaQBkAGcAZQB0AAAAAAD/////AAAARgD////7AAAADgBsAGkAYgByAGEAcgB5AAAAAAD/////AAAAWAD////7AAAAFABzAGMAcgBlAGUAbgBnAHIAYQBiAAAAAAD/////AAAARwD////7AAAAGgBhAHUAZABpAG8AcwBwAGUAYwB0AHIAdQBtAAAAAAD/////AAAAaQD////7AAAAFgBwAHIAbwBqAGUAYwB0AF8AYgBpAG4BAAAAAAAAAPsAAABGAP////wAAAEBAAAA+AAAAHsA////+gAAAAABAAAAAvsAAAAYAGUAZgBmAGUAYwB0AF8AcwB0AGEAYwBrAQAAAAD/////AAAARAD////7AAAAHgBjAGwAaQBwAF8AcAByAG8AcABlAHIAdABpAGUAcwEAAAAA/////wAAAEQA/////AAAAf8AAAGQAAAAewD////6AAAAAQEAAAAC+wAAAB4AdAByAGEAbgBzAGkAdABpAG8AbgBfAGwAaQBzAHQBAAAAAP////8AAAAAAP////sAAAAWAGUAZgBmAGUAYwB0AF8AbABpAHMAdAEAAAAA/////wAAAAAA/////AAAA5UAAAPnAAABQAD////6AAAAAQEAAAAC+wAAABgAYwBsAGkAcABfAG0AbwBuAGkAdABvAHIBAAAAAP////8AAAFAAP////sAAAAeAHAAcgBvAGoAZQBjAHQAXwBtAG8AbgBpAHQAbwByAQAAAAD/////AAABQAD////7AAAAGAB1AG4AZABvAF8AaABpAHMAdABvAHIAeQAAAAAA/////wAAAEYA////+wAAAAoAbQBpAHgAZQByAAAAAAD/////AAAAVgD////7AAAAFgB2AGUAYwB0AG8AcgBzAGMAbwBwAGUAAAAAAP////8AAAEoAP////sAAAAQAHcAYQB2AGUAZgBvAHIAbQAAAAAA/////wAAAKAA////+wAAABQAcgBnAGIAXwBwAGEAcgBhAGQAZQAAAAAA/////wAAAJ0A////+wAAABIAaABpAHMAdABvAGcAcgBhAG0AAAAAAP////8AAAE5AP///wAAB3wAAAGGAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAIAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAAAAAAGABlAHgAdAByAGEAVABvAG8AbABCAGEAcgEAAAIf/////wAAAAAAAAAA
+ToolBarsMovable=Disabled
+Width 1920=1920
+Window-Maximized 1080x1920=true
+
+[Recent Dirs]
+KdenliveClipFolder[$e]=$HOME/,$HOME/Videos,$HOME/Documents
+KdenliveProjectsFolder[$e]=$HOME/Videos,$HOME,$HOME/
+
+[Recent Files]
+File1[$e]=$HOME/technika_dne2.kdenlive
+File2[$e]=$HOME/Videos/technika_dne4.kdenlive
+Name1[$e]=technika_dne2.kdenlive
+Name2[$e]=technika_dne4.kdenlive
+
+[Scope_Histogram]
+autoRefresh=true
+bEnabled=true
+gEnabled=true
+rEnabled=true
+realtime=false
+rec601=false
+sEnabled=false
+yEnabled=true
+
+[Scope_RGB Parade]
+autoRefresh=true
+axis=false
+gradref=false
+paintmode=0
+realtime=false
+
+[Scope_Vectorscope]
+75PBox=false
+autoRefresh=true
+axis=false
+backgroundmode=0
+colorspace_ypbpr=false
+gain=1
+iqlines=false
+paintmode=0
+realtime=false
+
+[Scope_Waveform]
+autoRefresh=true
+paintmode=0
+realtime=false
+rec601=false
+
+[TitleWidget]
+background_alpha=0
+background_color=0,0,0
+dialog_geometry=AdnQywADAAAAAAE0AAAAMwAABkQAAAOzAAABNgAAADMAAAZCAAADsQAAAAAAAAAAB4AAAAE2AAAAMwAABkIAAAOx
+font_color=255,255,255
+font_family=DejaVu Sans,-1,54,5,50,0,0,0,0,0
+font_italic=false
+font_outline=0
+font_outline_color=invalid
+font_pixel_size=54
+font_underlined=false
+font_weight=50
+rect_background_alpha=255
+rect_background_color=0,0,0
+rect_foreground_alpha=255
+rect_foreground_color=0,0,0
+rect_line_width=0
+use_grid=false
+
+[UiSettings]
+ColorScheme=Breeze Dark
+
+[bin]
+treeviewheaders=AAAA/wAAAAAAAAABAAAAAQAAAAABAAAAAAAAAAAAAAAIfgAAAAYAAAAGAAAAZAAAAAUAAABkAAAABAAAAGQAAAADAAAAZAAAAAIAAAB4AAAAAQAAAEQAAACUAAAACAEBAAEAAAAAAAAAAAAAAABk/////wAAAIEAAAAAAAAACAAAAGQAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAADAAAAABAAAAAAAAA+gAAAAAMA==
+
+[capture]
+decklink_extension=mov
+decklink_parameters=vcodec=dnxhd vb=145000k acodec=pcm_s16le threads=%threads
+grab_extension=mov
+grab_parameters=-crf 25 -vcodec libx264 -preset veryfast -threads 0
+v4l_extension=mpg
+v4l_parameters=qscale=4 ab=192k vcodec=mpeg2video acodec=mp2 threads=%threads
+
+[env]
+defaultprojectfolder[$e]=$HOME/Videos
+ffmpegpath[$e]=/usr/bin/ffmpeg
+ffplaypath[$e]=/usr/bin/ffplay
+ffprobepath[$e]=/usr/bin/ffprobe
+mltpath[$e]=/usr/share/mlt/profiles
+rendererpath[$e]=/usr/bin/melt
+
+[project]
+vaapiEnabled=true
+
+[timeline]
+headerwidth=186
+trackheight=72
+
+[unmanaged]
+default_profile=atsc_1080p_25
+defaultrescaleheight=540
+defaultrescalewidth=960
+monitor_audio=false
+producerslist=ladspa.1416,ladspa.1885,ladspa.1881,decklink,blipflash,count,slowmotion,abnormal,color,colour,consumer,hold,loader,melt,melt_file,noise,timewarp,tone,pango,pixbuf,xml,xml-string,xml-nogl,vorbis,pgm,framebuffer,frei0r.ising0r,frei0r.lissajous0r,frei0r.nois0r,frei0r.onecol0r,frei0r.partik0l,frei0r.plasma,frei0r.test_pat_B,frei0r.test_pat_C,frei0r.test_pat_G,frei0r.test_pat_I,frei0r.test_pat_L,frei0r.test_pat_R,qimage,qtext,kdenlivetitle,avformat,avformat-novalidate
+use_dark_breeze=true
+widgetstyle=Default
+
+[version]
+version=20.04.0

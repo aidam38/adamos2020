@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Adam Krivka (aidam38)
 
-srclist=$1
-echo -e "$srclist" > bulktmp
-$EDITOR bulktmp
+srclist="$@"
+echo -e $scrlist
+kak bulktmp
 trglist="$(cat bulktmp)"
 
 srcn=$(echo "$srclist" | wc -l) &>/dev/null
