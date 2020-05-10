@@ -1,0 +1,1 @@
+../notifications/battery_notifications.sh

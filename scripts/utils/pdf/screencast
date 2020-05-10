@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# This script records a screencast with audio and video.
+
+folder=$HOME/screenshots
+name=$(date +%Y-%m-%d-%H-%M-%S)".mp4"
+
+if [[ $1 == "-g" ]]; then
+    wf-recorder -g "$(slurp)" $2 -f $folder/$name
+else
+    wf-recorder -f $1 $folder/$name
+fi

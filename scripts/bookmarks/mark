@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+cat ~/scripts/bookmarks/aliases | wofi --show dmenu 2>/dev/null | cut -d' ' -f2
