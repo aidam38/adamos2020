@@ -1,0 +1,303 @@
+# Adam Křivka's (aidam38) kakrc
+
+# basic key bindings
+map global normal ů :
+map global normal ú ':exec /(?i)<ret>'
+map global normal <space> ,
+map global normal <minus> '<a-;>'
+map global user <space> ';'
+map global user <esc> <space> -docstring "Keep only the main selection"
+map global normal X <a-x>
+map global normal '#' :comment-line<ret>
+map global normal <c-r> ":source ~/.config/kak/kakrc<ret>"
+map global normal <a-v> v
+map global normal '<a-;>' '<a-`>'
+map global user q ':wq<ret>' -docstring "Save and quit."
+map global user Q ':wq<ret>' -docstring "Quit."
+
+define-command spell-mode -docstring "Start spell-checking a map keys to go effectively through mistakes." %{
+	spell cs
+	map global normal '§' ':spell-next<ret>'
+}
+
+# clipboard managment
+hook global NormalKey y %{ nop %sh{
+	# printf %s "$kak_main_reg_dquote" | xsel --input --clipboard
+	printf %s "$kak_main_reg_dquote" | wl-copy
+}}
+map global normal P '<a-!>wl-paste<ret>'
+
+# compilation>
+map global user c ':w<ret>:terminal compile "%val{buffile}"<ret>' -docstring "Compile using the compile script"
+
+# building
+map global user m ':w<ret>:terminal ./make.sh <ret>' -docstring "Make using the make command"
+
+# wrapping
+declare-option -hidden bool wrap75chars false
+define-command wrap -docstring "Toggle wrapping by 75 chars and the full page" %{
+	remove-highlighter window/wrap
+	eval %sh{
+	if [[ "$kak_opt_wrap75chars" == "true" ]]; then
+		echo "add-highlighter window/wrap wrap -word -indent -marker '↪'"
+		echo "set-option window wrap75chars false"
+	else
+		echo "add-highlighter window/wrap wrap -word -indent -marker '↪' -width 75"
+		echo "set-option window wrap75chars true"
+	fi
+	}
+}
+define-command nowrap -docstring "Disable wrapping completely" %{
+    remove-highlighter window/wrap
+}
+
+# highlighters
+hook global WinCreate .* %{
+	add-highlighter window/numbers          number-lines -relative -hlcursor # -separator " ▏"
+	add-highlighter window/matching         show-matching
+	add-highlighter window/wrap             wrap -word -indent -marker '↪' # -width 75
+	add-highlighter window/show-whitespaces show-whitespaces -tab "▏" -lf " " -nbsp "⋅" -spc " "
+	add-highlighter window/operators        regex (\+|-|\*|&|=|\\|\?|%|\|-|!|\||->|\.|,|<|>|:|\^|/|~) 0:operator
+	add-highlighter window/delimiters       regex (\(|\)|\[|\]|\{|\}|\;|') 0:yellow
+	face global PrimaryCursorEol red,red
+	face global SecondaryCursorEol yellow,yellow
+}
+
+hook global ModeChange ".*:insert" %{
+	face global PrimaryCursor black,green
+	face global PrimaryCursorEol black,magenta
+}
+hook global ModeChange ".*:normal" %{
+	face global PrimaryCursor black,white
+	face global PrimaryCursorEol red,red
+}
+
+# other hooks
+hook global BufWritePost .*sxhkd.* %{
+  nop %sh{ pkill -USR1 -x sxhkd }
+  echo pkill -USR1 -x sxhkd
+}
+
+hook -group kakrc global BufCreate .*sxhkd.* %{ set buffer filetype sh }
+
+# filetype specific
+# LaTeX
+map global user k ':terminal zathura %sh{ echo $kak_buffile | sed "s|\..\{1,4\}$|.pdf|" }<ret>' -docstring "Preview pdf in the current folder" #{
+hook global BufSetOption filetype=latex %{ 
+	map global user C ':w<ret>:terminal compile %val{buffile}<ret>' -docstring "Compile using the compile script"
+	map global user C ':w<ret>:terminal compile -a %val{buffile}<ret>' -docstring "Compile using the compile script (alternative flag)"
+	map global user e ':exec /(?<=\\end\{)\w+(?=\})'
+	# map global user e '<a-:>a<ret>\end{!asdf!}<esc><a-;>O\begin{!asdf!}<esc>gh/!asdf!<ret>Nc'
+	hook global BufClose .* %{
+		nop %sh{texclear $kak_buffile}
+	}
+}
+
+hook global BufSetOption filetype=markdown %{
+	define-command zapis %{
+		exec 'I--- **<esc>!date "+%a %d. %m. %Y | %R"<ret>hi** ---  <ret>'
+	}
+	map global user z ":zapis<ret>"
+	remove-highlighter window/wrap
+	set-option window wrap75chars true
+	add-highlighter window/wrap wrap -word -indent -marker '↪' -width 75
+}
+
+# counting words
+map global user w %{"wz:echo %sh{echo "Words: $(echo $kak_selection | wc -w), chars: $(echo $kak_selection | wc -m)"}<ret>} -docstring "Count words"
+map global user W %{:echo %sh{analysepdf $(echo $kak_buffile | sed "s|\..\{1,4\}$|.pdf|")}<ret>}
+
+# plugins
+# initialization of plug.kak
+source "%val{config}/plugins/plug.kak/rc/plug.kak"
+
+# kak-tree
+# plug "ul/kak-tree"
+
+plug "alexherbo2/auto-pairs.kak" %{
+    map global user 's' ': auto-pairs-surround<ret>' -docstring "surround selection"
+    hook global WinCreate .* auto-pairs-enable
+}
+
+# kakoune-extra
+plug "lenormf/kakoune-extra" load %{
+	grepmenu.kak
+}
+
+# kakoune-vertical-selection
+plug "occivink/kakoune-vertical-selection" config %{
+	map global normal <a-c> ":vertical-selection-up-and-down<ret>"
+}
+
+# kakoune-text-objects
+plug "delapouite/kakoune-text-objects" 
+
+# kakoune-lf
+plug "TeddyDD/kakoune-lf" config %{
+    map global user f ':lf<ret>' -docstring "Launch lf"
+    declare-option -docstring %{shell command run to spawn a new terminal} str termcmd 'st -e bash -c'
+}
+
+# kakoune-snippets
+plug "occivink/kakoune-snippets" config %{
+	set-option global snippets_directories "%opt{plug_install_dir}/kakoune-snippet-collection/snippets"
+	set-option global snippets_auto_expand false
+	map global insert '§' "z<a-;>: snippets-expand-or-jump 'tab'<ret>"
+	map global normal '§' ": snippets-select-next-placeholders<ret>"
+	map global normal ',' ": snippets-insert-replace-first-placeholder<ret>"
+	map global normal '<a-,>' ': snippets-insert %sh{ echo "$(xsel --output --clipboard)" } <ret>'
+	alias global as snippets-add-snippet
+	alias global sr snippets-directory-reload
+
+	hook global InsertCompletionShow .* %{
+		try %{
+			execute-keys -draft 'h<a-K>\h<ret>'
+			map window insert '<ret>' "z<a-;>: snippets-expand-or-jump 'ret'<ret>"
+		}
+	}
+
+	hook global InsertCompletionHide .* %{
+		unmap window insert '<ret>' "z<a-;>: snippets-expand-or-jump 'ret'<ret>"
+	}
+
+	define-command snippets-insert-replace-first-placeholder %{
+		prompt 'Snippet name: ' %{
+			try %{
+				eval -save-regs '"' %{
+					exec -save-regs '' d
+					snippets-insert %val{text}
+					snippets-expand-or-jump 'tab'
+					exec R
+				}
+			}
+		}
+	}
+	define-command snippets-expand-or-jump -params 1 %{
+		execute-keys <backspace>
+		try %{
+			snippets-expand-trigger %{
+			set-register / "%opt{snippets_triggers_regex}\z"
+			execute-keys 'hGhs<ret>'
+		}
+		} catch %{
+			snippets-select-next-placeholders
+		} catch %sh{
+			case $1 in
+			ret|tab)
+				printf "%s\n" "execute-keys -with-hooks <$1>" ;;
+			*)
+				printf "%s\n" "execute-keys -with-hooks $1" ;;
+			esac
+			}
+	}
+}
+
+# snippet collection
+plug "aidam38/kakoune-snippet-collection"
+
+# powerline
+plug "https://github.com/andreyorst/powerline.kak" config %{
+	hook -once global WinCreate .* %{
+		powerline-format bufname filetype mode_info line_column position
+	}
+}
+
+# beacon (andreyoyrst)
+source "%val{config}/beacon.kak"
+
+plug "andreyorst/base16-gruvbox.kak" noload do %{
+    mkdir -p $HOME/.config/kak/colors
+    find $PWD -type f -name "*.kak" -exec ln -sf {} $HOME/.config/kak/colors/ \;
+} config %{
+    colorscheme base16-gruvbox-dark-soft # or any other variant
+}
+
+# buffers
+plug "https://github.com/Delapouite/kakoune-buffers" config %{
+	hook global WinDisplay .* info-buffers
+	# Suggested mappings
+	map global user b ':enter-buffers-mode<ret>'              -docstring 'buffers…'
+	map global user B ':enter-user-mode -lock buffers<ret>'   -docstring 'buffers (lock)…'
+}
+
+# surround
+plug "h-youhei/kakoune-surround" config %{
+	declare-user-mode surround
+	map global normal 'v' ':enter-user-mode surround<ret>'
+	map global surround v ':surround<ret>' -docstring 'surround'
+	map global surround c ':change-surround<ret>' -docstring 'change'
+	map global surround d ':delete-surround<ret>' -docstring 'delete'
+	map global surround t ':select-surrounding-tag<ret>' -docstring 'select tag'
+}
+
+# find
+plug "occivink/kakoune-find"
+# TODO
+
+hook global BufSetOption filetype=(python|latex|bash) %{ 
+	map global user "l" ": enter-user-mode lsp<ret>" -docstring "LSP mode"
+	plug "ul/kak-lsp" config %{
+		define-command lsp-restart %{ lsp-stop; lsp-start }
+		lsp-diagnostics-lines-enable global
+		set-option global lsp_completion_trigger "execute-keys 'h<a-h><a-k>\S[^\s,=;*(){}\[\]]\z<ret>'"
+		set-option global lsp_diagnostic_line_error_sign "!"
+		set-option global lsp_diagnostic_line_warning_sign "?"
+		map window lsp "n" "<esc>: lsp-find-error --include-warnings<ret>" -docstring "find next error or warning"
+		map window lsp "p" "<esc>: lsp-find-error --previous --include-warnings<ret>" -docstring "find previous error or warning"
+		hook -always global KakEnd .* lsp-exit
+		lsp-auto-hover-enable
+		lsp-auto-hover-insert-mode-disable
+		set-option window lsp_hover_anchor true
+		# set-face window DiagnosticError default+u
+		# set-face window DiagnosticWarning default+u
+	}
+}
+
+# kakoune-phantom-selection
+plug "occivink/kakoune-phantom-selection" config %{
+	map global user n ": phantom-selection-enable<ret>" -docstring "Enable phantom selection"
+	map global user N ": phantom-selection-disable<ret>" -docstring "Disable phantom selection"
+	define-command phantom-selection-enable -docstring "" %{
+		evaluate-commands phantom-selection-add-selection
+		map global normal n ": phantom-selection-iterate-next<ret>"
+		map global normal N ": phantom-selection-iterate-prev<ret>"
+	}
+	define-command phantom-selection-disable -docstring "" %{
+		evaluate-commands phantom-selection-select-all
+		evaluate-commands phantom-selection-clear
+		map global normal n n
+		map global normal N N
+	}
+}
+
+# kakoune-sudo-write
+plug "occivink/kakoune-sudo-write"
+
+# options
+set-option global scrolloff 7,7
+
+set-option global tabstop 4
+set-option global indentwidth 4
+
+
+# miscellanoues
+define-command show-color -docstring 'show main selection color in status bar' %{
+  evaluate-commands %sh{
+    awk_script='{
+      if ((x=index($1,"#")) > 0)
+        $1 = substr($1, x+1)
+      if (length($1) == 8)
+        $1 = substr($1, 1, 6)
+      if (length($1) == 4)
+        $1 = substr($1, 1, 3)
+      if (length($1) == 3) {
+        r = substr($1, 1, 1)
+        g = substr($1, 2, 1)
+        b = substr($1, 3, 1)
+        $1 = r r g g b b
+      }
+      print "evaluate-commands -client " client " echo -markup {rgb:" $1 "} ██████"
+    }'
+    printf %s\\n "$kak_selection" | awk -v client="$kak_client" "$awk_script" | kak -p "$kak_session"
+  }
+}
