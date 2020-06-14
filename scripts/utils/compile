@@ -5,9 +5,9 @@ case "${!#}" in
 	*\.tex)
 		if [[ "$1" == "-a" ]]; then
 			shift
-			latexmk --shell-escape -pdf $1 || read -n 1 -s -r -p "Press any key to continue"
+			texliveonfly -c latexmk --shell-escape -pdf $1 || read -n 1 -s -r -p "Press any key to continue"
 		else
-			latexmk -pdf -nobibtex $1
+			texliveonfly -c latexmk -pdf -nobibtex $1
 		fi ;;
 	*\.rmd) echo "require(rmarkdown); render('$1')" | R -q --vanilla ;;
 	*\.md) pandoc -o "${1%.*}.pdf" "$1" ;;

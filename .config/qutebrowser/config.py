@@ -47,7 +47,8 @@ config.bind('F', 'hint all tab-fg')
 config.bind('gi', 'hint inputs --first')
 config.bind('gI', 'hint inputs')
 
-config.bind('ú', 'set-cmd-text /')
+# config.bind('ú', 'set-cmd-text /')
+config.bind('/', 'set-cmd-text /')
 config.bind('ů', 'set-cmd-text :')
 
 config.bind('<Ctrl-I>', 'enter-mode passthrough')
@@ -71,12 +72,12 @@ config.bind('+', 'zoom-in')
 config.bind('-', 'zoom-out')
 config.bind('yf', 'hint links yank')
 config.bind('<Escape>', 'clear-keychain ;; search ;; fullscreen --leave')
-config.bind('d<Escape>', 'download-clear')
-config.bind('d<space>', 'download-open') 
-config.bind('dr', 'download-open alacritty ranger --selectfile=') 
-config.bind('dd', 'set-cmd-text -s :download') 
-config.bind('dc', 'download-cancel')
-config.bind('dg', 'yank -s ;; yank ;; spawn -u gcl.sh')
+config.bind('D<Escape>', 'download-clear')
+config.bind('D<space>', 'download-open') 
+config.bind('Dr', 'download-open alacritty ranger --selectfile=') 
+config.bind('Dd', 'set-cmd-text -s :download') 
+config.bind('Dc', 'download-cancel')
+config.bind('Dg', 'yank -s ;; yank ;; spawn -u gcl.sh')
 config.bind('t', 'open -t')
 # config.bind('<Alt-W>', 'quit --save')
 # config.bind('p', 'spawn --userscript qute-bitwarden')
@@ -106,7 +107,7 @@ config.bind('e', 'fake-key <Ctrl-right>');
 config.bind('B', 'fake-key <Ctrl-Shift+left>');
 config.bind('E', 'fake-key <Ctrl-Shift+right>');
 
-config.bind('d', 'fake-key <Backspace>');
+config.bind('d', 'fake-key <Ctrl+c>;; fake-key <Backspace>');
 config.bind('c', 'fake-key <Backspace>;; enter-mode insert');
 config.bind('x', 'fake-key <Home>;; fake-key <Shift+End>');
 config.bind('X', 'fake-key <Ctrl+Home>;; fake-key <Ctrl+Shift+End>');
@@ -120,8 +121,17 @@ config.bind('p', 'fake-key <Ctrl+v>');
 config.bind('u', 'fake-key <Ctrl+z>');
 config.bind('U', 'fake-key <Ctrl+y>');
 
-config.bind('gh', 'fake-key <Ctrl+Home>');
-config.bind('gl', 'fake-key <Ctrl+End>');
+config.bind('gh', 'fake-key <Home>');
+config.bind('gl', 'fake-key <End>');
+
+config.bind('gH', 'fake-key <Ctrl+Home>');
+config.bind('gL', 'fake-key <Ctrl+End>');
+
+config.bind('Gh', 'fake-key <Shift+Home>');
+config.bind('Gl', 'fake-key <Shift+End>');
+
+config.bind('Gk', 'fake-key <Ctrl+Shift+Home>');
+config.bind('Gj', 'fake-key <Ctrl+Shift+End>');
 
 config.bind('<Ctrl-Alt-+>', 'fake-key <Ctrl-Alt-1>');
 
@@ -357,7 +367,14 @@ config.bind('y', 'prompt-accept yes', mode='yesno')
 config.bind('Im', 'config-cycle content.user_stylesheets "~/.config/qutebrowser/userstyles/fb-messenger-dark.css" ""')
 config.bind('Ig', 'config-cycle content.user_stylesheets "~/.config/qutebrowser/userstyles/gruvbox-all-sites.css" ""')
 config.bind('Is', 'config-cycle content.user_stylesheets "~/.config/qutebrowser/userstyles/solarized-dark-all-sites.css" ""')
-config.bind('Ir', 'config-cycle content.user_stylesheets "~/.config/qutebrowser/userstyles/roam-bear-gotham.css" "~/.config/qutebrowser/userstyles/roam-dark.css"  "~/.config/qutebrowser/userstyles/roam-bear-panic.css" "~/.config/qutebrowser/userstyles/night-owl-ish.css" ""')
+
+config.bind('Ir1', 'config-cycle content.user_stylesheets "~/.config/qutebrowser/userstyles/roam-bear-gotham.css" ""')
+config.bind('Ir2', 'config-cycle content.user_stylesheets "~/.config/qutebrowser/userstyles/roam-dark.css" ""')
+config.bind('Ir3', 'config-cycle content.user_stylesheets "~/.config/qutebrowser/userstyles/roam-bear-panic.css" ""')
+config.bind('Ir4', 'config-cycle content.user_stylesheets "~/.config/qutebrowser/userstyles/night-owl-ish.css" ""')
+config.bind('Ir5', 'config-cycle content.user_stylesheets "~/.config/qutebrowser/userstyles/roam-nord.css" ""')
+config.bind('Ir6', 'config-cycle content.user_stylesheets "~/.config/qutebrowser/userstyles/roam-clean.css" ""')
+config.bind('Ir7', 'config-cycle content.user_stylesheets "~/.config/qutebrowser/userstyles/mappletons.css" ""')
 
 config.bind('xx', 'config-cycle statusbar.hide ;; config-cycle tabs.show always switching')
 config.bind('xt', 'config-cycle tabs.show always switching')
@@ -1019,7 +1036,7 @@ c.content.notifications = 'ask'
 #still be downloaded by clicking the download button in the pdf.js
 #viewer.
 #Type: Bool
-c.content.pdfjs = False
+c.content.pdfjs = True
 
 #Allow websites to request persistent storage quota via
 #`navigator.webkitPersistentStorage.requestQuota`.
@@ -1190,7 +1207,7 @@ c.fonts.messages.warning = '10pt monospace'
 #Default monospace fonts. Whenever "monospace" is used in a font
 #setting, it's replaced with the fonts listed here.
 #Type: Font
-c.fonts.default_family = 'Iosevka, Hack, Inconsolata, "xos4 Terminus", Terminus, Monospace, "DejaVu Sans Mono", Monaco, "Bitstream Vera Sans Mono", "Andale Mono", "Courier New", Courier, "Liberation Mono", monospace, Fixed, Consolas, Terminal'
+c.fonts.default_family = 'Lato, Iosevka, Hack, Inconsolata, "xos4 Terminus", Terminus, Monospace, "DejaVu Sans Mono", Monaco, "Bitstream Vera Sans Mono", "Andale Mono", "Courier New", Courier, "Liberation Mono", monospace, Fixed, Consolas, Terminal'
 
 #Font used for prompts.
 #Type: Font
@@ -1347,11 +1364,11 @@ c.input.insert_mode.auto_load = False
 #Type: Bool
 c.input.insert_mode.plugins = False
 
-for urlpattern in (
-        '*://google.(ca\|com)/maps/',
-        '*://translate.google.(ca\|com)',
-        '*://facebook.(ca\|com)'):
-    config.set('input.insert_mode.leave_on_load', False, urlpattern)
+# for urlpattern in (
+#         '*://google.(ca\|com)/maps/',
+#         '*://translate.google.(ca\|com)',
+#         '*://facebook.(ca\|com)'):
+#     config.set('input.insert_mode.leave_on_load', False, urlpattern)
 
 #Include hyperlinks in the keyboard focus chain when tabbing.
 #Type: Bool

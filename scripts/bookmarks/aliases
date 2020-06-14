@@ -38,7 +38,7 @@ ao /home/adam/drive/skola/olympiady/AO/2018-2019
 db /home/adam/.bin
 sc /home/adam/scripts
 skaw /home/adam/team_drives/or89/Design/web/SKAUT-Basic
-prg /home/adam/.install/dual/programs
+prg /home/adam/scripts/install/programs
 ntm /home/adam/builds/notemap
 sx /home/adam/.config/sxhkd/sxhkdrc
 en /home/adam/projects/eunomia/eunomia_analyza
@@ -80,3 +80,6 @@ sway /home/adam/.config/sway/config
 fish /home/adam/.config/fish/config.fish
 ranger /home/adam/.config/ranger/rc.conf
 droam /home/adam/scripts/bin
+mount /run/media/adam
+projects /home/adam/projects/aktivni
+zpevnikovac /home/adam/projects/aktivni/zpevnikovac

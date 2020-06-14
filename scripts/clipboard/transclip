@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+echo -e "kindle_to_roam
+hypothesis_to_roam
+roam_to_doc" | wofi -S dmenu | bash
+

@@ -1,0 +1,243 @@
+# interpreter for shell commands (needs to be POSIX compatible)
+set shell bash
+set shellopts '-e'
+set ifs "\n"
+set scrolloff 7
+set drawbox on
+set dircounts
+set color256
+set info size
+set findlen 0
+set noanchorfind
+set period 1
+set previewer ~/.config/lf/prev.sh
+set promptfmt " \[\033[38;5;166m\]%u\[\033[38;5;244m\]@\[\033[38;5;217m\]%h\[\033[38;5;15m\] \[\033[38;5;155;1m\]%w" 
+
+# responsive columns
+cmd recol &{{
+    w=$(tput cols)
+    if [ $w -le 40 ]; then
+        lf -remote "send $id set nopreview"
+        lf -remote "send $id set ratios 1"
+    elif [ $w -le 80 ]; then
+        lf -remote "send $id set preview"
+        lf -remote "send $id set ratios 1:2"
+    else
+        lf -remote "send $id set preview"
+        lf -remote "send $id set ratios 1:2:3"
+    fi
+}}
+
+# define a custom 'open' command using rifle
+cmd open ${{
+	for f in $fx; do rifle $f || notify-send "$f" ; done
+}}
+
+cmd fzy ${{
+	lf -remote "send $id select '$(fd --no-ignore --color=always --hidden --follow | fzy)'"
+	# selection=$(fzf | sed 's/ /\\ /g' | sed 's/\(.*\)\//\1:/')
+	# lf -remote "send $id cd $(echo "$selection" | awk -F ":" '{print $1}')"
+	# lf -remote "send $id select $(echo "$selection" | awk -F ":" '{print $2}')"
+}}
+
+# rename current file without overwrite
+cmd rename %[ -e $1 ] && printf "file exists" || mv $f $1
+
+cmd paste-legacy ${{
+    load=$(lf -remote 'load')
+    mode=$(echo "$load" | sed -n '1p')
+    list=$(echo "$load" | sed '1d')
+    if [ $mode = 'copy' ]; then
+	rsync -avh --ignore-existing --progress $list . \
+	| stdbuf -i0 -o0 -e0 tr '\r' '\n' \
+	| while read line; do
+		echo "$line"
+		lf -remote "send $id echo $line"
+	done
+    elif [ $mode = 'move' ]; then
+        mv -n $list .
+    fi
+    lf -remote 'send load'
+    lf -remote 'send clear'
+}}
+
+cmd symlink &{{
+    load=$(lf -remote 'load')
+    list=$(echo "$load" | sed '1d')
+    while read -r line; do
+        ln -s $1 $line . && lf -remote "send $id echo Symlinked $line to current directory." || lf -remote "send $id echo Failed to symlink file $line"
+    done <<< "$list"
+    lf -remote 'send load'
+    lf -remote 'send clear'
+}}
+
+cmd hardlink &{{
+    load=$(lf -remote 'load')
+    list=$(echo "$load" | sed '1d')
+	dunstify "I'm here"
+	while read line; do
+        ln $line . && lf -remote "send $id echo Hardlinked $line to current directory." || lf -remote "send $id echo Failed to hardlink file $line"
+		dunstify "$line"
+    done <<< "$list"
+    lf -remote 'send load'
+    lf -remote 'send clear'
+}}
+
+cmd makearticle ${{
+	mkdir "$1"
+	cd "$1"
+	cp /home/adam/scripts/example_article/example_article.tex ./"$1".tex
+}}
+
+cmd makebeamer ${{
+	read name
+	mkdir "$1"
+	cd "$1"
+	cp /home/adam/scripts/example_beamer/example_beamer.tex ./"$1".tex
+}}
+
+# extract the current file with the right command
+# (xkcd link: https://xkcd.com/1168/)
+cmd extract ${{
+    set -f
+    case $f in
+        *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f;;
+        *.tar.gz|*.tgz) tar xzvf $f;;
+        *.tar.xz|*.txz) tar xJvf $f;;
+        *.gz) gunzip $f;;
+        *.zip) unzip $f;;
+        *.rar) unrar x $f;;
+        *.7z) 7z x $f;;
+    esac
+}}
+
+# compress current file or selected files with tar and gunzip
+cmd tar ${{
+    set -f
+    mkdir $1
+    rsync -avh --progress $fx $1
+    # cp -r $fx $1
+    tar czfv $1.tar.gz $1
+    rm -rf $1
+}}
+
+cmd tarr ${{
+    set -f
+    tar czfv $1.tar.gz $fx
+}}
+
+# compress current file or selected files with zip
+cmd zip ${{
+    set -f
+    mkdir $1
+    rsync -avh --progress $fx $1
+    # cp -r $fx $1
+    zip -rv $1.zip $1
+    rm -rf $1
+}}
+
+
+# my bindings
+
+# basic
+map ů read
+map ú search
+map / $lf -remote "send $id select '$(fd --no-ignore-vcs --color=always | fzf --ansi)'"
+map J push <space>k
+map K push <space>kk
+map gj bottom
+map gk top
+map s push :glob-select<space>
+map <enter> open
+map '§' $echo "Enter command with which to open the selected files"; read program && rifle -w "$program" $fx
+# map '!' $mimeopen --ask-default $f
+map Y $imgclip "$f"
+map E $$EDITOR $f
+map <a-w> q
+map f quit
+map F ${{nohup st -e lf.sh "$f" &>/dev/null &}}
+map Lsa symlink
+map Lsr symlink -r
+map Lh hardlink
+map a $lf -remote "send $id push :rename<space>$(basename $f | sed 's/ /<space>/g')<a-b><left>"
+map A $lf -remote "send $id push :rename<space>$(basename $f | sed 's/ /<space>/g')"
+map c push :rename<space>
+map <c-r> !bulkrename "$fx"
+map <c-s> $lf -remote "send $id push \$order<space><space>\$fx<left><left><left><left>"
+map r recol
+map md push :$mkdir<space>
+map mk push :$$EDITOR<space>
+map me push :$echo<space>-e<space>"\n"<space><gt><space>
+map ma makearticle
+map mb makebeamer
+map mx $lf -remote "send $id push :\$chmod<space>755<space>$f<left><left>"
+map D %trash-put $fx
+map <c-d> delete
+map Z push zh
+map t :set sortby time; set reverse
+map T :set sortby natural; set reverse!
+map <esc> clear; unselect
+map - unselect
+map <f-5> source /home/adam/.config/lf/lfrc; echo "Config loaded."
+map i !stat $f ; du -sh $f ; mimetype $f 
+# map i !stat $f
+map I !du -sh $f
+map x $$f
+map X !$f
+map Ce extract
+map Ct push :tar<space>
+map CT push :tarr<space>
+map Cz push :zip<space>
+
+# bookmarking
+cmd open_mark ${{
+	mark=$(cat ~/scripts/bookmarks/aliases | fzf -n 1 | awk '{$1=""; print $0}' | xargs)
+	if [[ $1 == "-t" ]]; then
+		nohup st -e lf.sh "$mark" &>/dev/null &
+	else
+		if [[ -d "$mark" ]]; then
+			lf -remote "send $id cd "$(echo $mark | sed 's/\s/\\ /g')""
+		elif [[ -f "$mark" ]]; then
+			lf -remote "send $id select "$(echo $mark | sed 's/\s/\\ /g')""
+		fi
+	fi
+}}
+
+cmd edit_mark ${{
+	mark=$(cat ~/scripts/bookmarks/aliases | fzf -n 1 | awk '{$1=""; print $0}' | xargs)
+	if [[ -f "$mark" ]]; then
+		lf -remote "send $id select $mark"
+		if [[ $1 == "-t" ]]; then
+			nohup st -e $EDITOR "$mark" &>/dev/null &
+		else
+			$EDITOR "$mark"
+		fi
+	fi
+}}
+
+map o $lf -remote "send $id select '$(fzf)'"
+map O ${{nohup st -e lf.sh "$(fzf)" &>/dev/null &}}
+map b open_mark
+map B open_mark -t
+map e edit_mark
+map E edit_mark -t
+map mm $lf -remote "send $id push :\$addalias<space>\"$f\"<space>"
+
+# command line bindings
+cmap <esc> cmd-escape
+cmap <tab> cmd-complete
+cmap <enter> cmd-enter
+cmap <c-j> cmd-history-next
+cmap <c-k> cmd-history-prev
+cmap <bs> cmd-delete-back
+cmap <c-b> cmd-left
+cmap <c-n> cmd-right
+cmap <c-d> cmd-delete-unix-word
+cmap <c-c> cmd-interrupt
+cmap <c-w> cmd-word
+cmap <c-b> cmd-word-back
+
+# unmapping stuff
+map w
+map m
+map G

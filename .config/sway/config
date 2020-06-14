@@ -8,6 +8,10 @@ exec wl-paste -t text --watch clipman store
 
 exec rm $SWAYSOCK.wob; mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
 
+# exec ydotoold
+
+exec battery_notifications.sh
+
 smart_gaps on
 gaps inner 10
 
@@ -98,7 +102,7 @@ input type:keyboard {
     floating_modifier $mod normal
 
     # Reload the configuration file
-    bindsym $mod+Shift+c reload
+    bindsym $mod+Shift+r reload
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
@@ -142,6 +146,7 @@ input type:keyboard {
     bindsym $mod+aacute workspace 8
     bindsym $mod+iacute workspace 9
     bindsym $mod+eacute workspace 10
+
     # Move focused container to workspace
     bindsym $mod+Shift+plus move container to workspace 1; workspace 1
     bindsym $mod+Shift+ecaron move container to workspace 2; workspace 2
@@ -175,6 +180,7 @@ input type:keyboard {
     bindsym $mod+m splitv
     bindsym $mod+comma splith
 
+
     # Switch the current container between different layout styles
     # bindsym $mod+s layout stacking
     bindsym $mod+t layout tabbed
@@ -207,7 +213,7 @@ input type:keyboard {
     bindsym $mod+Ctrl+z move workspace to output left; focus output right
     bindsym $mod+Ctrl+o move workspace to output right; focus output left
 
-    bindsym $mod+p exec ls -d /home/adam/.screenlayout/* | wofi --show dmenu | xargs bash -c --
+    bindsym $mod+p exec ls -d /home/adam/scripts/screenlayout/* | wofi --show dmenu | xargs bash -c --
 #
 # Scratchpad:
 #
@@ -267,28 +273,19 @@ bar {
     }
 }
 
-
-
 # my own bindings for launching scripts
-bindsym $mod+f exec $TERM -e ranger
+bindsym $mod+f exec $TERM -e ranger.sh
 bindsym $mod+Shift+f exec $TERM -e ranger --selectfile=/home/adam/downloads/*
 bindsym $mod+d exec wofi --show run 
 # bindsym $mod+r exec scratchpad pmath.sh
 # bindsym $mod+s exec spotify
-bindsym $mod+g exec echo -e "$(grabc)ff" | xsel --input --clipboard
+bindsym $mod+g exec echo -e "$(grabc)ff" | wl-copy
 bindsym $mod+c exec clipman pick -t dmenu
+bindsym $mod+Shift+c exec transclip
+bindsym $mod+s exec snippets.sh
 	
-# bindsym $mod+F9
-# 	dmenumount
-# bindsym $mod+shift + F9
-# 	dmenuumount
-
-# bindsym $mod+shift + y
-# 	exitprompt
-
 bindsym --locked XF86MonBrightnessUp exec bright up
 bindsym --locked XF86MonBrightnessDown exec bright down
-
 
 bindsym --locked XF86AudioRaiseVolume exec volume up
 bindsym --locked XF86AudioLowerVolume exec volume down
@@ -302,13 +299,12 @@ bindsym $mod+Ctrl+F7 exec screencast -g -a
 bindsym $mod+Ctrl+Shift+F7 exec screencast -a
 bindsym $mod+F8 exec pkill -SIGINT wf-recorder 
 
-bindsym $mod+Home exec pkill spt &>/dev/null; exec spt
-bindsym $mod+End exec pkill -SIGUSR1 spt 
-bindsym $mod+Insert exec pkill -SIGUSR2 spt; exec pkill -SIGUSR1 spt  
+bindsym $mod+Home exec killall spt &>/dev/null; exec spt
+bindsym $mod+End exec killall -SIGUSR1 spt 
+bindsym $mod+Insert exec killall -SIGUSR2 spt; exec pkill -SIGUSR1 spt  
 
 bindsym $mod+Delete exec makoctl dismiss
 
-bindsym $mod+s exec wl-paste | kindle_to_roam.py | wl-copy
 
 # multi-monitor binds
 

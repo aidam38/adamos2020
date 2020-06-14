@@ -1,0 +1,1 @@
+/home/adam/scripts/clipboard/snippets.sh

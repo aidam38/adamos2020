@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+page=$(wofi -S dmenu -p "Type page from which you want to copy your notes to the end:")
+
+wl-paste | ~/scripts/clipboard/kindle_to_roam.py -p $page | wl-copy
+

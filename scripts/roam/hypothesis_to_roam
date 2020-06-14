@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-wl-paste | hypothesis_to_roam.py | wl-copy

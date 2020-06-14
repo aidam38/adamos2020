@@ -3,7 +3,8 @@
 !.config
 !.config/*
 !.config/alacritty/*
-!.config/Code - OSS/*
+!.config/Code - OSS/User/settings.json
+!.config/Code - OSS/User/keybindings.json
 !.config/mako/*
 !.config/fish
 !.config/fish/**
