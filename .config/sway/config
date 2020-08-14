@@ -295,8 +295,8 @@ bindsym --locked XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ to
 bindsym $mod+Print exec screenshot
 bindsym $mod+F7 exec screencast -g
 bindsym $mod+Shift+F7 exec screencast 
-bindsym $mod+Ctrl+F7 exec screencast -g -a
-bindsym $mod+Ctrl+Shift+F7 exec screencast -a
+bindsym $mod+Ctrl+F7 exec screencast -g --audio
+bindsym $mod+Ctrl+Shift+F7 exec screencast --audio
 bindsym $mod+F8 exec pkill -SIGINT wf-recorder 
 
 bindsym $mod+Home exec killall spt &>/dev/null; exec spt

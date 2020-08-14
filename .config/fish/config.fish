@@ -1,6 +1,6 @@
 set fish_greeting ""
 
-set -gx PATH /home/adam/scripts/bin /snap/bin $PATH
+set -gx PATH /home/adam/scripts/bin /home/adam/.npm-global/bin $PATH
 set -gx EDITOR kak
 set -gx VISUAL kak
 

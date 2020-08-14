@@ -8,6 +8,5 @@ name=$(date +%Y-%m-%d-%H-%M-%S)".mp4"
 if [[ $1 == "-g" ]]; then
     wf-recorder -g "$(slurp)" $2 -f $folder/$name
 else
-    echo "$1"
     wf-recorder $1 -f $folder/$name
 fi

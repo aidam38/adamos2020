@@ -24,6 +24,9 @@ sxiv
 ranger
 w3m
 pulseaudio
+pulseaudio-bluetooth
+bluez
+blueman
 pavucontrol
 pamixer
 udiskie
@@ -43,3 +46,6 @@ kdenlive
 light
 gotop
 conky
+cups
+sane
+brother-dcpl2530dw

@@ -15,17 +15,14 @@ map global normal '<a-;>' '<a-`>'
 map global user q ':wq<ret>' -docstring "Save and quit."
 map global user Q ':wq<ret>' -docstring "Quit."
 
-define-command spell-mode -docstring "Start spell-checking a map keys to go effectively through mistakes." %{
-	spell cs
-	map global normal '§' ':spell-next<ret>'
-}
 
 # clipboard managment
-hook global NormalKey y %{ nop %sh{
-	# printf %s "$kak_main_reg_dquote" | xsel --input --clipboard
-	printf %s "$kak_main_reg_dquote" | wl-copy
+hook global NormalKey y|d|c %{ nop %sh{
+  printf %s "$kak_main_reg_dquote" | xsel --input --clipboard
 }}
-map global normal P '<a-!>wl-paste<ret>'
+
+
+map global normal P '<a-!>xclip -o<ret>'
 
 # compilation>
 map global user c ':w<ret>:terminal compile "%val{buffile}"<ret>' -docstring "Compile using the compile script"
@@ -61,6 +58,11 @@ hook global WinCreate .* %{
 	add-highlighter window/delimiters       regex (\(|\)|\[|\]|\{|\}|\;|') 0:yellow
 	face global PrimaryCursorEol red,red
 	face global SecondaryCursorEol yellow,yellow
+
+    define-command spell-mode -docstring "Start spell-checking a map keys to go effectively through mistakes." %{
+    	spell cs
+    	map global normal '§' ':spell-next<ret>'
+    }
 }
 
 hook global ModeChange ".*:insert" %{

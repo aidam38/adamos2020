@@ -1036,7 +1036,7 @@ c.content.notifications = 'ask'
 #still be downloaded by clicking the download button in the pdf.js
 #viewer.
 #Type: Bool
-c.content.pdfjs = True
+c.content.pdfjs = False
 
 #Allow websites to request persistent storage quota via
 #`navigator.webkitPersistentStorage.requestQuota`.
@@ -1219,7 +1219,7 @@ c.fonts.statusbar = '10pt monospace'
 
 #Font used in the tab bar.
 #Type: QtFont
-c.fonts.tabs = '10pt monospace'
+# c.fonts.tabs = '10pt monospace'
 
 #Font family for cursive fonts.
 #Type: FontFamily
@@ -1383,7 +1383,7 @@ c.input.partial_timeout = 5000
 #Enable Opera-like mouse rocker gestures. This disables the context
 #menu.
 #Type: Bool
-c.input.rocker_gestures = False
+# c.input.rocker_gestures = False
 
 #Enable spatial navigation. Spatial navigation consists in the ability
 #to navigate between focusable elements in a Web page, such as
@@ -1559,7 +1559,7 @@ c.spellcheck.languages = []
 
 #Hide the statusbar unless a message is shown.
 #Type: Bool
-c.statusbar.hide = False
+# c.statusbar.hide = False
 
 #Padding (in pixels) for the statusbar.
 #Type: Padding
